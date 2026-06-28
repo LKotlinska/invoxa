@@ -1,0 +1,34 @@
+.navbar {
+  width: max-content;
+  padding: var(--padding-nav);
+  height: 100%;
+  box-sizing: border-box;
+  background-color: var(--mat-sys-surface-container-lowest);
+}
+
+.nav-header {
+  display: flex;
+  align-items: center;
+  gap: 0.25em;
+  padding: 1em 0;
+}
+
+.home-link {
+  color: var(--mat-sys-primary);
+  text-decoration: none;
+}
+
+.list-container {
+  padding: 1em 0;
+}
+
+.list-item {
+  margin: 0.25em 0;
+}
+
+.item-title {
+  text-transform: capitalize;
+}
+.site-title {
+  font-weight: 600;
+}

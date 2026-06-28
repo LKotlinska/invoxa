@@ -1,0 +1,26 @@
+<!-- left panel close/open-->
+<mat-nav-list class="navbar">
+  <a routerLink="" class="home-link">
+    <div matListItemIcon class="nav-header">
+      <mat-icon>assignment</mat-icon>
+      <span class="site-title">Invoxa</span>
+    </div>
+  </a>
+  <mat-divider></mat-divider>
+  <div class="list-container">
+    @for (link of fragments; track link) {
+      <a
+        class="list-item"
+        mat-list-item
+        routerLink="/{{ link.title }}"
+        (click)="$event.preventDefault(); activeLink = link.title"
+        [activated]="activeLink === link.title"
+      >
+        <div matListItemIcon>
+          <mat-icon>{{ link.icon }}</mat-icon>
+        </div>
+        <span class="item-title">{{ link.title }}</span>
+      </a>
+    }
+  </div>
+</mat-nav-list>
