@@ -1,0 +1,10 @@
+.header {
+  width: 100%;
+  background-color: var(--mat-sys-surface-container-lowest);
+  padding: var(--padding-header);
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+
+  h2 {
+    text-transform: capitalize;
+  }
+}

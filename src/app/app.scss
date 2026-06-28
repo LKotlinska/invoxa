@@ -1,4 +1,8 @@
 .site-wrapper {
   display: flex;
   min-height: 100%;
+
+  .main {
+    width: 100%;
+  }
 }
