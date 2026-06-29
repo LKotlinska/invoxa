@@ -18,8 +18,6 @@ export class Header {
         if (event.url === '/') {
           event.url = '/dashboard';
         }
-        // Navigation completed
-        console.log('Navigation completed:', event.url);
         this.currentUrl.set(event.url.replace('/', ''));
       }
     });
