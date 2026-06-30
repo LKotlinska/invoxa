@@ -45,3 +45,4 @@ TODO.md
 # System files
 .DS_Store
 Thumbs.db
+supabase/.temp/linked-project.json
