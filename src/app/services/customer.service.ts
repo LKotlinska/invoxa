@@ -8,13 +8,21 @@ export class CustomerService {
   constructor(private supabaseService: SupabaseService) {}
 
   getCustomers(): Observable<CustomerTableData[]> {
-    return from(this.supabaseService.client.from('customers').select('id, name, email')).pipe(
+    return from(
+      this.supabaseService.client
+        .from('customers')
+        .select('id, full_name, email, street_name, postal_code, city, country'),
+    ).pipe(
       map(({ data, error }) => {
         if (error) throw error;
         return data.map((customer) => ({
           id: customer.id,
+          full_name: customer.full_name,
           email: customer.email,
-          name: customer.name,
+          street_name: customer.street_name,
+          postal_code: customer.postal_code,
+          city: customer.city,
+          country: customer.country,
         }));
       }),
     );
