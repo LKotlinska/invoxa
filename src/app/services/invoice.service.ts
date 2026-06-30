@@ -12,7 +12,7 @@ export class InvoiceService {
     return from(
       this.supabaseService.client
         .from('invoices')
-        .select('id, invoice_number, due_date, status, customers(name)'),
+        .select('id, invoice_number, due_date, status, customers(full_name)'),
     ).pipe(
       map(({ data, error }) => {
         if (error) throw error;
@@ -21,7 +21,7 @@ export class InvoiceService {
           invoice_number: invoice.invoice_number,
           due_date: invoice.due_date,
           status: invoice.status,
-          customers: invoice.customers?.name ?? '',
+          customers: invoice.customers?.full_name ?? '',
         }));
       }),
     );

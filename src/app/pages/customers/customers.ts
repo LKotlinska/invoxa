@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { CustomerTable } from './customer-table/customer-table';
 
 @Component({
   selector: 'app-customers',
-  imports: [],
+  imports: [CustomerTable],
   templateUrl: './customers.html',
   styleUrl: './customers.scss',
 })
