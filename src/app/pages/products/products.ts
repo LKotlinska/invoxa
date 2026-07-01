@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { ProductTable } from './product-table/product-table';
 
 @Component({
   selector: 'app-products',
-  imports: [],
+  imports: [ProductTable],
   templateUrl: './products.html',
   styleUrl: './products.scss',
 })
