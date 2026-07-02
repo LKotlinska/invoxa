@@ -13,7 +13,7 @@ import { MatTableModule } from '@angular/material/table';
 })
 export class ProductTable implements OnInit {
   products$!: Observable<Product[]>;
-  displayedColumns = signal<(keyof Product)[]>(['id', 'product_name', 'price']);
+  displayedColumns = signal<(keyof Product)[]>(['id', 'product_name', 'price', 'sold']);
   constructor(private productService: ProductService) {}
 
   ngOnInit(): void {
