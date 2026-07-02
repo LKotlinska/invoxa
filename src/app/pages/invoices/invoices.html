@@ -1,1 +1,4 @@
-<app-invoice-table />
+<app-data-table
+  [displayedColumns]="['invoice_number', 'customers', 'status', 'due_date']"
+  [items]="invoices()"
+/>
