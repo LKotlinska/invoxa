@@ -1,4 +1,1 @@
-<app-data-table
-  [displayedColumns]="['id', 'full_name', 'email', 'street_name', 'postal_code', 'city', 'country']"
-  [items]="customers()"
-/>
+<app-data-table [displayedColumns]="displayedColumns()" [items]="customers()" />

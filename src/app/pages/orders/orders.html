@@ -1,4 +1,1 @@
-<app-data-table
-  [displayedColumns]="['id', 'invoice_id', 'product_name', 'price', 'quantity']"
-  [items]="orders()"
-></app-data-table>
+<app-data-table [displayedColumns]="displayedColumns()" [items]="orders()"></app-data-table>

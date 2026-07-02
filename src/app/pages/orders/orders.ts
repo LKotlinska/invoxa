@@ -11,13 +11,13 @@ import { DataTable } from '../../shared/data-table/data-table';
 })
 export class Orders {
   orders = signal<OrderTableData[]>([]);
-  displayedColumns = <(keyof OrderTableData)[]>[
+  displayedColumns = signal<(keyof OrderTableData)[]>([
     'id',
     'invoice_id',
     'product_name',
     'price',
     'quantity',
-  ];
+  ]);
   orderService = inject(OrderService);
 
   ngOnInit(): void {
