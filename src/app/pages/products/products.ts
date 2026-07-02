@@ -1,10 +1,22 @@
-import { Component } from '@angular/core';
-import { ProductTable } from './product-table/product-table';
+import { Component, inject, signal } from '@angular/core';
+import { DataTable } from '../../shared/data-table/data-table';
+import { Product } from '../../../types/types';
+import { ProductService } from '../../services/product.service';
 
 @Component({
   selector: 'app-products',
-  imports: [ProductTable],
+  imports: [DataTable],
   templateUrl: './products.html',
   styleUrl: './products.scss',
 })
-export class Products {}
+export class Products {
+  products = signal<Product[]>([]);
+  displayedColumns = signal<(keyof Product)[]>(['id', 'product_name', 'price', 'sold']);
+  productService = inject(ProductService);
+
+  ngOnInit(): void {
+    this.productService.getProducts().subscribe((products) => {
+      this.products.set(products);
+    });
+  }
+}
