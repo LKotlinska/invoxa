@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SupabaseService } from './supabase.service';
 import { from, map, Observable } from 'rxjs';
-import { CustomerTableData } from '../../types/types';
+import { CustomerOption, CustomerTableData } from '../../types/types';
 
 @Injectable({ providedIn: 'root' })
 export class CustomerService {
@@ -24,6 +24,15 @@ export class CustomerService {
           city: customer.city,
           country: customer.country,
         }));
+      }),
+    );
+  }
+
+  getCustomerOptions(): Observable<CustomerOption[]> {
+    return from(this.supabaseService.client.from('customers').select('id, email')).pipe(
+      map(({ data, error }) => {
+        if (error) throw error;
+        return data;
       }),
     );
   }
