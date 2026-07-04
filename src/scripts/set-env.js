@@ -13,4 +13,3 @@ export const environment = {
 
 fs.mkdirSync('./src/environments', { recursive: true });
 fs.writeFileSync('./src/environments/environment.ts', envContent);
-console.log('✅ environment.ts generated');
