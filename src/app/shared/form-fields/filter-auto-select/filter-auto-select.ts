@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, input, OnInit, output } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map, startWith } from 'rxjs/operators';
@@ -7,7 +7,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CustomerService } from '../../../services/customer.service';
-import { CustomerOption } from '../../../../types/types';
+import { Customer, CustomerOption } from '../../../../types/types';
 
 @Component({
   selector: 'app-filter-auto-select',
@@ -23,10 +23,13 @@ import { CustomerOption } from '../../../../types/types';
   styleUrl: './filter-auto-select.scss',
 })
 export class FilterAutoSelect {
+  label = input.required<string>();
+  placeholder = input<string>();
   customerService = inject(CustomerService);
   myControl = new FormControl('', { nonNullable: true });
   customers$: Observable<CustomerOption[]> = this.customerService.getCustomerOptions();
   filteredOptions: Observable<CustomerOption[]>;
+  customerOutput = output<CustomerOption>();
 
   constructor() {
     this.filteredOptions = combineLatest([
@@ -37,7 +40,7 @@ export class FilterAutoSelect {
 
   private _filter(customers: CustomerOption[], value: string | CustomerOption): CustomerOption[] {
     if (typeof value != 'string') {
-      //autofill logic
+      this.customerOutput.emit(value);
     }
 
     const filterValue = (typeof value === 'string' ? value : value.email).toLowerCase();
