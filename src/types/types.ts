@@ -12,6 +12,11 @@ export type CustomerTableData = Omit<Customer, 'county' | 'created_at'>;
 
 export type CustomerOption = Pick<Customer, 'id' | 'email'>;
 
+export type CustomerAddress = Pick<
+  Customer,
+  'full_name' | 'street_name' | 'postal_code' | 'city' | 'country'
+>;
+
 export type Product = Database['public']['Tables']['products']['Row'];
 
 export type ProductTableData = Database['public']['Tables']['products']['Row'];
