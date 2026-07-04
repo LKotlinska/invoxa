@@ -1,55 +1,57 @@
 <form>
-  <div>
-    <p>Customer information</p>
-    <app-filter-auto-select
-      (customerOutput)="onCustomerSelected($event)"
-      label="Email"
-      placeholder="eric@example.com"
-    />
-    <p>Shipping information</p>
-    <app-outlined-input
-      [myControl]="controlFullName"
-      label="Full name"
-      type="text"
-      placeholder="Eric Johansson"
-    />
-    <app-outlined-input
-      [myControl]="controlStreetName"
-      label="Street name and nr"
-      type="text"
-      placeholder="Kungsgatan 12"
-    />
-    <app-outlined-input
-      [myControl]="controlPostalCode"
-      label="Postal code"
-      type="text"
-      placeholder="81254"
-    />
-    <app-outlined-input
-      [myControl]="controlCity"
-      label="City"
-      type="text"
-      placeholder="Stockholm"
-    />
-    <app-outlined-input
-      [myControl]="controlCountry"
-      label="Country"
-      type="text"
-      placeholder="Sweden"
-    />
-  </div>
-  <div>
-    <app-outlined-input [myControl]="controlDate" label="Date" type="date" placeholder="Sweden" />
-    <app-select-input
-      [myControl]="controlPayment"
-      label="Payment method"
-      [items]="paymentMethods"
-    />
-    <app-outlined-input
-      [myControl]="controlDueDate"
-      label="Due date"
-      type="date"
-      placeholder="Sweden"
-    />
+  <div class="info-container">
+    <div class="info-fields">
+      <h3>Customer information</h3>
+      <app-filter-auto-select
+        (customerOutput)="onCustomerSelected($event)"
+        label="Email"
+        placeholder="eric@example.com"
+      />
+      <app-outlined-input
+        [myControl]="controlFullName"
+        label="Full name"
+        type="text"
+        placeholder="Eric Johansson"
+      />
+      <app-outlined-input
+        [myControl]="controlStreetName"
+        label="Street name and nr"
+        type="text"
+        placeholder="Kungsgatan 12"
+      />
+      <app-outlined-input
+        [myControl]="controlPostalCode"
+        label="Postal code"
+        type="text"
+        placeholder="81254"
+      />
+      <app-outlined-input
+        [myControl]="controlCity"
+        label="City"
+        type="text"
+        placeholder="Stockholm"
+      />
+      <app-outlined-input
+        [myControl]="controlCountry"
+        label="Country"
+        type="text"
+        placeholder="Sweden"
+      />
+    </div>
+    <div class="info-fields">
+      <h3>Invoice information</h3>
+      <app-outlined-input [myControl]="controlDate" label="Date" type="date" placeholder="Sweden" />
+      <app-select-input
+        [myControl]="controlPayment"
+        label="Payment method"
+        [items]="paymentMethods"
+      />
+      <app-outlined-input
+        [myControl]="controlDueDate"
+        label="Due date"
+        type="date"
+        placeholder="Sweden"
+      />
+    </div>
   </div>
 </form>

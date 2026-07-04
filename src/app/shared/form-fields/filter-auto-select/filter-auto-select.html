@@ -1,17 +1,15 @@
-<form class="example-form">
-  <mat-form-field class="example-full-width">
-    <mat-label>{{ label() }}</mat-label>
-    <input
-      type="text"
-      placeholder="e.g. {{ placeholder() }}"
-      matInput
-      [formControl]="myControl"
-      [matAutocomplete]="auto"
-    />
-    <mat-autocomplete [displayWith]="displayWith" #auto="matAutocomplete">
-      @for (option of filteredOptions | async; track option) {
-        <mat-option [value]="option">{{ option.email }}</mat-option>
-      }
-    </mat-autocomplete>
-  </mat-form-field>
-</form>
+<mat-form-field appearance="outline">
+  <mat-label>{{ label() }}</mat-label>
+  <input
+    type="text"
+    placeholder="e.g. {{ placeholder() }}"
+    matInput
+    [formControl]="myControl"
+    [matAutocomplete]="auto"
+  />
+  <mat-autocomplete [displayWith]="displayWith" #auto="matAutocomplete">
+    @for (option of filteredOptions | async; track option) {
+      <mat-option [value]="option">{{ option.email }}</mat-option>
+    }
+  </mat-autocomplete>
+</mat-form-field>
