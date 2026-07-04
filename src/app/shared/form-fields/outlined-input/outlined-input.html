@@ -1,4 +1,9 @@
 <mat-form-field appearance="outline">
   <mat-label>{{ label() }}</mat-label>
-  <input matInput type="{{ type() }}" placeholder="e.g. {{ placeholder() }}" />
+  <input
+    [formControl]="myControl()"
+    matInput
+    type="{{ type() }}"
+    placeholder="e.g. {{ placeholder() }}"
+  />
 </mat-form-field>
