@@ -16,6 +16,7 @@ export class ProductService {
           id: product.id,
           price: product.price,
           product_name: product.product_name,
+          sold: product.sold,
         }));
       }),
     );

@@ -21,6 +21,7 @@ export class SideNav {
     { title: 'invoices', icon: 'article' },
     { title: 'customers', icon: 'person' },
     { title: 'products', icon: 'inventory_2' },
+    { title: 'orders', icon: 'receipt' },
     { title: 'settings', icon: 'settings' },
   ];
   activeLink: string | null = null;
