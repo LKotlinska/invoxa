@@ -1,4 +1,4 @@
-import { Injectable, OnInit } from '@angular/core';
+import { inject, Injectable, OnInit } from '@angular/core';
 import { SupabaseService } from './supabase.service';
 import { from, map, Observable } from 'rxjs';
 import { Product } from '../../types/types';
@@ -7,7 +7,8 @@ import { Product } from '../../types/types';
   providedIn: 'root',
 })
 export class ProductService {
-  constructor(private supabaseService: SupabaseService) {}
+  supabaseService = inject(SupabaseService);
+
   getProducts(): Observable<Product[]> {
     return from(this.supabaseService.client.from('products').select('*')).pipe(
       map(({ data, error }) => {
@@ -16,6 +17,7 @@ export class ProductService {
           id: product.id,
           price: product.price,
           product_name: product.product_name,
+          sold: product.sold,
         }));
       }),
     );

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { SupabaseService } from './supabase.service';
 import { Observable, from } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -6,7 +6,7 @@ import { InvoiceTableData } from '../../types/types';
 
 @Injectable({ providedIn: 'root' })
 export class InvoiceService {
-  constructor(private supabaseService: SupabaseService) {}
+  supabaseService = inject(SupabaseService);
 
   getInvoices(): Observable<InvoiceTableData[]> {
     return from(

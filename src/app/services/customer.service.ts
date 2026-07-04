@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { SupabaseService } from './supabase.service';
 import { from, map, Observable } from 'rxjs';
 import { CustomerAddress, CustomerOption, CustomerTableData } from '../../types/types';
 
 @Injectable({ providedIn: 'root' })
 export class CustomerService {
-  constructor(private supabaseService: SupabaseService) {}
+  supabaseService = inject(SupabaseService);
 
   getCustomers(): Observable<CustomerTableData[]> {
     return from(
