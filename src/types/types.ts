@@ -24,3 +24,9 @@ export type ProductTableData = Database['public']['Tables']['products']['Row'];
 export type PaymentMethod = Database['public']['Enums']['payment_method_type'];
 
 export const paymentMethodTypes: PaymentMethod[] = ['bank_transfer', 'card', 'swish'];
+
+export type OrderItem = Database['public']['Tables']['orders']['Row'];
+
+export type InvoiceItem = OrderItem & {
+  product_name: string;
+};
