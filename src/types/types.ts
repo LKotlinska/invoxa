@@ -1,3 +1,4 @@
+import { Data } from '@angular/router';
 import { Database } from './supabase';
 
 export type Invoice = Database['public']['Tables']['invoices']['Row'];
@@ -32,3 +33,6 @@ export type OrderItem = Database['public']['Tables']['orders']['Row'];
 export type InvoiceItem = OrderItem & {
   product_name: string;
 };
+export type Order = Database['public']['Tables']['orders']['Row'];
+
+export type OrderTableData = Omit<Order, 'product_id'> & { product_name: string };

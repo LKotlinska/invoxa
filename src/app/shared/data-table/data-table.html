@@ -1,4 +1,4 @@
-<table mat-table [dataSource]="(invoices$ | async) ?? []" class="mat-elevation-z8 invoice-table">
+<table mat-table [dataSource]="items() ?? []" class="mat-elevation-z8 invoice-table">
   @for (column of displayedColumns(); track column) {
     <ng-container matColumnDef="{{ column }}">
       <th mat-header-cell *matHeaderCellDef>{{ column }}</th>

@@ -1,17 +1,16 @@
 import { inject, Injectable } from '@angular/core';
 import { SupabaseService } from './supabase.service';
 import { from, map, Observable } from 'rxjs';
-import { InvoiceItem, OrderItem } from '../../types/types';
+import { OrderTableData } from '../../types/types';
 
 @Injectable({
   providedIn: 'root',
 })
-export class orderService {
+export class OrderService {
   supabaseService = inject(SupabaseService);
-
-  getOrders(): Observable<InvoiceItem[]> {
+  getOrders(): Observable<OrderTableData[]> {
     return from(
-      this.supabaseService.client.from('orders').select('*, invoices(id), products(product_name)'),
+      this.supabaseService.client.from('orders').select('*, products(product_name)'),
     ).pipe(
       map(({ data, error }) => {
         if (error) throw error;
