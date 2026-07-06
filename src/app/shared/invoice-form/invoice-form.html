@@ -3,9 +3,11 @@
     <div class="info-fields">
       <h3>Customer information</h3>
       <app-filter-auto-select
-        (customerOutput)="onCustomerSelected($event)"
-        label="Email"
+        label="Customer email"
         placeholder="eric@example.com"
+        [options]="(customers$ | async) ?? []"
+        [displayFn]="displayCustomer"
+        (optionSelected)="onCustomerSelected($event)"
       />
       <app-outlined-input
         [myControl]="controlFullName"
@@ -53,5 +55,56 @@
         placeholder="Sweden"
       />
     </div>
+  </div>
+  <div>
+    <table>
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Name</th>
+          <th>Price</th>
+          <th>Quantity</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <app-outlined-input
+              label="Product id"
+              type="number"
+              [myControl]="controlId"
+              aria-disabled="true"
+            />
+          </td>
+          <td>
+            <app-filter-auto-select
+              label="Product name"
+              placeholder="Bread"
+              [options]="(products$ | async) ?? []"
+              [displayFn]="displayProduct"
+              (optionSelected)="onProductSelected($event)"
+            />
+          </td>
+          <td>
+            <app-outlined-input
+              label="Price"
+              placeholder="119"
+              type="number"
+              [myControl]="controlPrice"
+            />
+          </td>
+          <td>
+            <app-outlined-input
+              label="Quantity"
+              placeholder="5"
+              type="number"
+              [myControl]="controlQty"
+            />
+          </td>
+          <td>{{ itemCost$ | async }}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </form>
