@@ -43,12 +43,8 @@ export class FilterAutoSelect<T> {
     }
     if (typeof value === 'string') {
       const filterValue = value.toLowerCase();
-      console.log('value:');
-      console.log(value);
       return options.filter((o) => this.displayFn()(o).toLowerCase().includes(filterValue));
     }
-    console.log('Options:');
-    console.log(options);
     return options;
   }
 
