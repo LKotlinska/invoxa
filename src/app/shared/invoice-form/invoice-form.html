@@ -68,42 +68,48 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>
-            <app-outlined-input
-              label="Product id"
-              type="number"
-              [myControl]="controlId"
-              aria-disabled="true"
-            />
-          </td>
-          <td>
-            <app-filter-auto-select
-              label="Product name"
-              placeholder="Bread"
-              [options]="(products$ | async) ?? []"
-              [displayFn]="displayProduct"
-              (optionSelected)="onProductSelected($event)"
-            />
-          </td>
-          <td>
-            <app-outlined-input
-              label="Price"
-              placeholder="119"
-              type="number"
-              [myControl]="controlPrice"
-            />
-          </td>
-          <td>
-            <app-outlined-input
-              label="Quantity"
-              placeholder="5"
-              type="number"
-              [myControl]="controlQty"
-            />
-          </td>
-          <td>{{ itemCost$ | async }}</td>
-        </tr>
+        @for (row of rows; track row; let i = $index) {
+          <tr [formGroup]="row">
+            <td>
+              <app-outlined-input
+                label="Product id"
+                type="number"
+                [myControl]="row.controls.id"
+                aria-disabled="true"
+              />
+            </td>
+            <td>
+              <app-filter-auto-select
+                label="Product name"
+                placeholder="Bread"
+                [options]="(products$ | async) ?? []"
+                [displayFn]="displayProduct"
+                (optionSelected)="onProductSelected($event, row)"
+              />
+            </td>
+            <td>
+              <app-outlined-input
+                label="Price"
+                placeholder="119"
+                type="number"
+                [myControl]="row.controls.price"
+              />
+            </td>
+            <td>
+              <app-outlined-input
+                label="Quantity"
+                placeholder="5"
+                type="number"
+                [myControl]="row.controls.qty"
+              />
+            </td>
+            <td>{{ rowCost$(row) | async }}</td>
+            <td>
+              <button type="button" (click)="removeRow($index)" matButton>- Remove product</button>
+            </td>
+          </tr>
+        }
+        <button type="button" (click)="addRow()" matButton>+ New product</button>
       </tbody>
     </table>
   </div>

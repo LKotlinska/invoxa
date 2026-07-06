@@ -21,6 +21,8 @@ export type Product = Database['public']['Tables']['products']['Row'];
 
 export type ProductTableData = Database['public']['Tables']['products']['Row'];
 
+export type ProductItem = Omit<Product, 'sold'>;
+
 export type PaymentMethod = Database['public']['Enums']['payment_method_type'];
 
 export const paymentMethodTypes: PaymentMethod[] = ['bank_transfer', 'card', 'swish'];

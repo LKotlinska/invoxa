@@ -1,6 +1,8 @@
 import { Component, inject, OnInit, Output, signal } from '@angular/core';
 import { OutlinedInput } from '../../shared/form-fields/outlined-input/outlined-input';
 import { SelectInput } from '../../shared/form-fields/select-input/select-input';
+
+import { MatButtonModule } from '@angular/material/button';
 import {
   CustomerAddress,
   CustomerOption,
@@ -12,13 +14,35 @@ import {
 import { ProductService } from '../../services/product.service';
 import { FilterAutoSelect } from '../form-fields/filter-auto-select/filter-auto-select';
 import { CustomerService } from '../../services/customer.service';
-import { FormControl } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  ɵInternalFormsSharedModule,
+  ReactiveFormsModule,
+  FormArray,
+} from '@angular/forms';
 import { combineLatest, map, Observable, startWith } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 
+type InvoiceRows = FormArray<InvoiceRow>;
+type InvoiceRow = FormGroup<{
+  id: FormControl;
+  name: FormControl;
+  price: FormControl;
+  qty: FormControl;
+}>;
+
 @Component({
   selector: 'app-invoice-form',
-  imports: [OutlinedInput, SelectInput, FilterAutoSelect, AsyncPipe],
+  imports: [
+    OutlinedInput,
+    SelectInput,
+    FilterAutoSelect,
+    AsyncPipe,
+    MatButtonModule,
+    ɵInternalFormsSharedModule,
+    ReactiveFormsModule,
+  ],
   templateUrl: './invoice-form.html',
   styleUrl: './invoice-form.scss',
 })
@@ -35,8 +59,6 @@ export class InvoiceForm {
   selectedCustomer!: CustomerAddress;
   displayCustomer = (c: CustomerOption) => c.email;
 
-  itemCost$!: Observable<number>;
-
   controlDate = new FormControl();
   controlDueDate = new FormControl();
   controlPayment = new FormControl();
@@ -45,11 +67,6 @@ export class InvoiceForm {
   controlPostalCode = new FormControl();
   controlCity = new FormControl();
   controlCountry = new FormControl();
-
-  controlId = new FormControl();
-  controlName = new FormControl();
-  controlPrice = new FormControl();
-  controlQty = new FormControl();
 
   onCustomerSelected(customer: CustomerOption): void {
     this.customerService.getCustomerById(customer.id).subscribe((value) => {
@@ -61,23 +78,54 @@ export class InvoiceForm {
       this.controlCity.setValue(this.selectedCustomer.city);
       this.controlCountry.setValue(this.selectedCustomer.country);
     });
+    // console.log(this.ProductForm);
   }
 
-  onProductSelected(product: Product): void {
-    this.productService.getProductById(product.id).subscribe((value) => {
-      this.selectedProduct = value;
+  itemCost$!: Observable<number>;
 
-      this.controlId.setValue(this.selectedProduct.id);
-      this.controlId.disable();
-      this.controlName.setValue(this.selectedProduct.product_name);
-      this.controlPrice.setValue(this.selectedProduct.price);
+  productGroups = new FormArray<InvoiceRow>([]);
+
+  private createRow(): InvoiceRow {
+    const group = new FormGroup({
+      id: new FormControl(),
+      name: new FormControl(),
+      price: new FormControl(),
+      qty: new FormControl(),
     });
+    group.controls.id.disable();
+    return group;
   }
 
   constructor() {
-    this.itemCost$ = combineLatest([
-      this.controlPrice.valueChanges.pipe(startWith(this.controlPrice.value)),
-      this.controlQty.valueChanges.pipe(startWith(this.controlQty.value)),
+    this.addRow(); // start with one row
+  }
+
+  addRow(): void {
+    this.productGroups.push(this.createRow());
+  }
+
+  removeRow(index: number): void {
+    this.productGroups.removeAt(index);
+  }
+
+  get rows(): InvoiceRow[] {
+    return this.productGroups.controls;
+  }
+
+  onProductSelected(product: Product, row: FormGroup): void {
+    this.productService.getProductById(product.id).subscribe((value) => {
+      row.patchValue({
+        id: value.id,
+        name: value.product_name,
+        price: value.price,
+      });
+    });
+  }
+
+  rowCost$(row: FormGroup): Observable<number> {
+    return combineLatest([
+      row.get('price')!.valueChanges.pipe(startWith(row.get('price')!.value)),
+      row.get('qty')!.valueChanges.pipe(startWith(row.get('qty')!.value)),
     ]).pipe(map(([price, qty]) => Number(price) * Number(qty)));
   }
 }
