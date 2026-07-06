@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CustomerService } from '../../../services/customer.service';
 import { Customer, CustomerOption } from '../../../../types/types';
+import { toObservable } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-filter-auto-select',
@@ -22,32 +23,34 @@ import { Customer, CustomerOption } from '../../../../types/types';
   templateUrl: './filter-auto-select.html',
   styleUrl: './filter-auto-select.scss',
 })
-export class FilterAutoSelect {
+export class FilterAutoSelect<T> {
   label = input.required<string>();
   placeholder = input<string>();
-  customerService = inject(CustomerService);
   myControl = new FormControl('', { nonNullable: true });
-  customers$: Observable<CustomerOption[]> = this.customerService.getCustomerOptions();
-  filteredOptions: Observable<CustomerOption[]>;
-  customerOutput = output<CustomerOption>();
+  options = input.required<T[]>();
+  displayFn = input.required<(item: T) => string>();
+  optionSelected = output<T>();
 
-  constructor() {
-    this.filteredOptions = combineLatest([
-      this.customers$,
-      this.myControl.valueChanges.pipe(startWith('')),
-    ]).pipe(map(([customers, value]) => this._filter(customers, value || '')));
-  }
+  filteredOptions = combineLatest([
+    toObservable(this.options),
+    this.myControl.valueChanges.pipe(startWith('')),
+  ]).pipe(map(([options, value]) => this._filter(options, value || '')));
 
-  private _filter(customers: CustomerOption[], value: string | CustomerOption): CustomerOption[] {
+  private _filter(options: T[], value: string | T): T[] {
     if (typeof value != 'string') {
-      this.customerOutput.emit(value);
+      this.optionSelected.emit(value);
+      // return options;
     }
-
-    const filterValue = (typeof value === 'string' ? value : value.email).toLowerCase();
-    return customers.filter((customer) => customer.email.toLowerCase().includes(filterValue));
+    if (typeof value === 'string') {
+      const filterValue = value.toLowerCase();
+      console.log('value:');
+      console.log(value);
+      return options.filter((o) => this.displayFn()(o).toLowerCase().includes(filterValue));
+    }
+    console.log('Options:');
+    console.log(options);
+    return options;
   }
 
-  displayWith(value: CustomerOption): string {
-    return value?.email ?? '';
-  }
+  displayWith = (value: T): string => (value ? this.displayFn()(value) : '');
 }

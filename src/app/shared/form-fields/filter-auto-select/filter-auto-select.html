@@ -9,7 +9,7 @@
   />
   <mat-autocomplete [displayWith]="displayWith" #auto="matAutocomplete">
     @for (option of filteredOptions | async; track option) {
-      <mat-option [value]="option">{{ option.email }}</mat-option>
+      <mat-option [value]="option">{{ displayFn()(option) }}</mat-option>
     }
   </mat-autocomplete>
 </mat-form-field>
