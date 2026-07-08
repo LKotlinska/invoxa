@@ -1,14 +1,20 @@
 <mat-form-field appearance="outline">
   <mat-label>{{ label() }}</mat-label>
   <input
-    type="text"
+    type="{{ type() }}"
     placeholder="e.g. {{ placeholder() }}"
     matInput
-    [formControl]="myControl"
+    [formControl]="myControl()"
     [matAutocomplete]="auto"
   />
+  @if (myControl().hasError(type()) && !myControl().hasError('required')) {
+    <mat-error>Please enter a valid value</mat-error>
+  }
+  @if (myControl().hasError('required')) {
+    <mat-error>This field is <strong>required</strong></mat-error>
+  }
   <mat-autocomplete [displayWith]="displayWith" #auto="matAutocomplete">
-    @for (option of filteredOptions | async; track option) {
+    @for (option of filteredOptions(); track option) {
       <mat-option [value]="option">{{ displayFn()(option) }}</mat-option>
     }
   </mat-autocomplete>
