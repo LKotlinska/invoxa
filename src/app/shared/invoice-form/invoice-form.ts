@@ -60,7 +60,11 @@ export class InvoiceForm {
   selectedCustomer!: CustomerAddress;
   displayCustomer = (c: CustomerOption) => c.email;
 
-  controlEmail = new FormControl('', [Validators.email, Validators.required]);
+  controlEmail = new FormControl('', [
+    // Fixes the validation against type 'email' in filter autocomplete component as it emits an object.
+    (control) => (typeof control.value !== 'string' ? null : Validators.email(control)),
+    Validators.required,
+  ]);
   controlDate = new FormControl('', Validators.required);
   controlDueDate = new FormControl('', Validators.required);
   controlPayment = new FormControl('', Validators.required);
@@ -88,16 +92,16 @@ export class InvoiceForm {
   private createRow(): InvoiceRow {
     const group = new FormGroup({
       id: new FormControl(),
-      name: new FormControl(),
-      price: new FormControl(),
-      qty: new FormControl(),
+      name: new FormControl('', Validators.required),
+      price: new FormControl('', [Validators.required]),
+      qty: new FormControl('', Validators.required),
     });
     group.controls.id.disable();
     return group;
   }
 
   constructor() {
-    this.addRow(); // start with one row
+    this.addRow();
   }
 
   addRow(): void {
