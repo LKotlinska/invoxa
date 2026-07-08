@@ -6,4 +6,10 @@
     type="{{ type() }}"
     placeholder="e.g. {{ placeholder() }}"
   />
+  @if (myControl().hasError(type()) && !myControl().hasError('required')) {
+    <mat-error>Please enter a valid value</mat-error>
+  }
+  @if (myControl().hasError('required')) {
+    <mat-error>This field is <strong>required</strong></mat-error>
+  }
 </mat-form-field>
