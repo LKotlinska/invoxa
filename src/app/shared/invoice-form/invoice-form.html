@@ -1,0 +1,116 @@
+<form>
+  <div class="info-container">
+    <div class="info-fields">
+      <h3>Customer information</h3>
+      <app-filter-auto-select
+        label="Customer email"
+        placeholder="eric@example.com"
+        [options]="(customers$ | async) ?? []"
+        [displayFn]="displayCustomer"
+        (optionSelected)="onCustomerSelected($event)"
+      />
+      <app-outlined-input
+        [myControl]="controlFullName"
+        label="Full name"
+        type="text"
+        placeholder="Eric Johansson"
+      />
+      <app-outlined-input
+        [myControl]="controlStreetName"
+        label="Street name and nr"
+        type="text"
+        placeholder="Kungsgatan 12"
+      />
+      <app-outlined-input
+        [myControl]="controlPostalCode"
+        label="Postal code"
+        type="text"
+        placeholder="81254"
+      />
+      <app-outlined-input
+        [myControl]="controlCity"
+        label="City"
+        type="text"
+        placeholder="Stockholm"
+      />
+      <app-outlined-input
+        [myControl]="controlCountry"
+        label="Country"
+        type="text"
+        placeholder="Sweden"
+      />
+    </div>
+    <div class="info-fields">
+      <h3>Invoice information</h3>
+      <app-outlined-input [myControl]="controlDate" label="Date" type="date" placeholder="Sweden" />
+      <app-select-input
+        [myControl]="controlPayment"
+        label="Payment method"
+        [items]="paymentMethods"
+      />
+      <app-outlined-input
+        [myControl]="controlDueDate"
+        label="Due date"
+        type="date"
+        placeholder="Sweden"
+      />
+    </div>
+  </div>
+  <div>
+    <table>
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Name</th>
+          <th>Price</th>
+          <th>Quantity</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of rows; track row; let i = $index) {
+          <tr [formGroup]="row">
+            <td>
+              <app-outlined-input
+                label="Product id"
+                type="number"
+                [myControl]="row.controls.id"
+                aria-disabled="true"
+              />
+            </td>
+            <td>
+              <app-filter-auto-select
+                label="Product name"
+                placeholder="Bread"
+                [options]="(products$ | async) ?? []"
+                [displayFn]="displayProduct"
+                (optionSelected)="onProductSelected($event, row)"
+              />
+            </td>
+            <td>
+              <app-outlined-input
+                label="Price"
+                placeholder="119"
+                type="number"
+                [myControl]="row.controls.price"
+              />
+            </td>
+            <td>
+              <app-outlined-input
+                label="Quantity"
+                placeholder="5"
+                type="number"
+                [myControl]="row.controls.qty"
+              />
+            </td>
+            <td>{{ rowCost$(row) | async }}</td>
+            <td>
+              <button type="button" (click)="removeRow($index)" matButton>- Remove product</button>
+            </td>
+          </tr>
+        }
+        <button type="button" (click)="addRow()" matButton>+ New product</button>
+      </tbody>
+    </table>
+  </div>
+</form>

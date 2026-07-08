@@ -1,0 +1,15 @@
+<mat-form-field appearance="outline">
+  <mat-label>{{ label() }}</mat-label>
+  <input
+    type="text"
+    placeholder="e.g. {{ placeholder() }}"
+    matInput
+    [formControl]="myControl"
+    [matAutocomplete]="auto"
+  />
+  <mat-autocomplete [displayWith]="displayWith" #auto="matAutocomplete">
+    @for (option of filteredOptions | async; track option) {
+      <mat-option [value]="option">{{ displayFn()(option) }}</mat-option>
+    }
+  </mat-autocomplete>
+</mat-form-field>
