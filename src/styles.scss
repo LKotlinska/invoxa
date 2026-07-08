@@ -1,4 +1,11 @@
+@use '@angular/material' as mat;
 :root {
   --padding-nav: 1.5em;
   --padding-header: 1em;
+
+  @include mat.form-field-density(-3);
+}
+
+.form-field {
+  margin-top: 0.25em;
 }
