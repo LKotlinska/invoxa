@@ -20,6 +20,7 @@ import {
   ɵInternalFormsSharedModule,
   ReactiveFormsModule,
   FormArray,
+  Validators,
 } from '@angular/forms';
 import { combineLatest, map, Observable, startWith } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
@@ -59,14 +60,18 @@ export class InvoiceForm {
   selectedCustomer!: CustomerAddress;
   displayCustomer = (c: CustomerOption) => c.email;
 
-  controlDate = new FormControl();
-  controlDueDate = new FormControl();
-  controlPayment = new FormControl();
-  controlFullName = new FormControl();
-  controlStreetName = new FormControl();
-  controlPostalCode = new FormControl();
-  controlCity = new FormControl();
-  controlCountry = new FormControl();
+  controlEmail = new FormControl('', [Validators.email, Validators.required]);
+  controlDate = new FormControl('', Validators.required);
+  controlDueDate = new FormControl('', Validators.required);
+  controlPayment = new FormControl('', Validators.required);
+  controlFullName = new FormControl('', Validators.required);
+  controlStreetName = new FormControl('', Validators.required);
+  controlPostalCode = new FormControl('', Validators.required);
+  controlCity = new FormControl('', Validators.required);
+  controlCountry = new FormControl('', Validators.required);
+
+  itemCost$!: Observable<number>;
+  productGroups = new FormArray<InvoiceRow>([]);
 
   onCustomerSelected(customer: CustomerOption): void {
     this.customerService.getCustomerById(customer.id).subscribe((value) => {
@@ -78,12 +83,7 @@ export class InvoiceForm {
       this.controlCity.setValue(this.selectedCustomer.city);
       this.controlCountry.setValue(this.selectedCustomer.country);
     });
-    // console.log(this.ProductForm);
   }
-
-  itemCost$!: Observable<number>;
-
-  productGroups = new FormArray<InvoiceRow>([]);
 
   private createRow(): InvoiceRow {
     const group = new FormGroup({
@@ -127,5 +127,10 @@ export class InvoiceForm {
       row.get('price')!.valueChanges.pipe(startWith(row.get('price')!.value)),
       row.get('qty')!.valueChanges.pipe(startWith(row.get('qty')!.value)),
     ]).pipe(map(([price, qty]) => Number(price) * Number(qty)));
+  }
+
+  onSubmit(event: Event) {
+    event.preventDefault();
+    console.log('Submit works');
   }
 }
