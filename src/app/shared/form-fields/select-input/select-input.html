@@ -1,8 +1,14 @@
-<mat-form-field appearance="outline">
+<mat-form-field class="form-field" appearance="outline">
   <mat-label>{{ label() }}</mat-label>
-  <mat-select>
+  <mat-select [formControl]="myControl()">
     @for (item of items(); track item) {
       <mat-option [value]="item">{{ item }}</mat-option>
     }
   </mat-select>
+  @if (!myControl().hasError('required')) {
+    <mat-error>Please enter a valid value</mat-error>
+  }
+  @if (myControl().hasError('required')) {
+    <mat-error>This field is <strong>required</strong></mat-error>
+  }
 </mat-form-field>

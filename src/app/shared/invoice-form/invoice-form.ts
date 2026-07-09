@@ -20,6 +20,7 @@ import {
   ɵInternalFormsSharedModule,
   ReactiveFormsModule,
   FormArray,
+  Validators,
 } from '@angular/forms';
 import { combineLatest, map, Observable, startWith } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
@@ -59,14 +60,22 @@ export class InvoiceForm {
   selectedCustomer!: CustomerAddress;
   displayCustomer = (c: CustomerOption) => c.email;
 
-  controlDate = new FormControl();
-  controlDueDate = new FormControl();
-  controlPayment = new FormControl();
-  controlFullName = new FormControl();
-  controlStreetName = new FormControl();
-  controlPostalCode = new FormControl();
-  controlCity = new FormControl();
-  controlCountry = new FormControl();
+  controlEmail = new FormControl('', [
+    // Fixes the validation against type 'email' in filter autocomplete component as it emits an object.
+    (control) => (typeof control.value !== 'string' ? null : Validators.email(control)),
+    Validators.required,
+  ]);
+  controlDate = new FormControl('', Validators.required);
+  controlDueDate = new FormControl('', Validators.required);
+  controlPayment = new FormControl('', Validators.required);
+  controlFullName = new FormControl('', Validators.required);
+  controlStreetName = new FormControl('', Validators.required);
+  controlPostalCode = new FormControl('', Validators.required);
+  controlCity = new FormControl('', Validators.required);
+  controlCountry = new FormControl('', Validators.required);
+
+  itemCost$!: Observable<number>;
+  productGroups = new FormArray<InvoiceRow>([]);
 
   onCustomerSelected(customer: CustomerOption): void {
     this.customerService.getCustomerById(customer.id).subscribe((value) => {
@@ -78,26 +87,21 @@ export class InvoiceForm {
       this.controlCity.setValue(this.selectedCustomer.city);
       this.controlCountry.setValue(this.selectedCustomer.country);
     });
-    // console.log(this.ProductForm);
   }
-
-  itemCost$!: Observable<number>;
-
-  productGroups = new FormArray<InvoiceRow>([]);
 
   private createRow(): InvoiceRow {
     const group = new FormGroup({
       id: new FormControl(),
-      name: new FormControl(),
-      price: new FormControl(),
-      qty: new FormControl(),
+      name: new FormControl('', Validators.required),
+      price: new FormControl('', [Validators.required]),
+      qty: new FormControl('', Validators.required),
     });
     group.controls.id.disable();
     return group;
   }
 
   constructor() {
-    this.addRow(); // start with one row
+    this.addRow();
   }
 
   addRow(): void {
@@ -127,5 +131,10 @@ export class InvoiceForm {
       row.get('price')!.valueChanges.pipe(startWith(row.get('price')!.value)),
       row.get('qty')!.valueChanges.pipe(startWith(row.get('qty')!.value)),
     ]).pipe(map(([price, qty]) => Number(price) * Number(qty)));
+  }
+
+  onSubmit(event: Event) {
+    event.preventDefault();
+    console.log('Submit works');
   }
 }
