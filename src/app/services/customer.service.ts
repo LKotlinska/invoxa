@@ -44,6 +44,7 @@ export class CustomerService {
       map(({ data, error }) => {
         if (error) throw error;
         return {
+          id: data.id,
           full_name: data.full_name,
           street_name: data.street_name,
           postal_code: data.postal_code,

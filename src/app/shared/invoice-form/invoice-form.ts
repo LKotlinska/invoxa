@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, Output, signal } from '@angular/core';
+import { Component, inject, OnInit, Output, Signal, signal } from '@angular/core';
 import { OutlinedInput } from '../../shared/form-fields/outlined-input/outlined-input';
 import { SelectInput } from '../../shared/form-fields/select-input/select-input';
 
@@ -6,7 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import {
   CustomerAddress,
   CustomerOption,
-  InvoiceItem,
+  PaymentMethod,
   paymentMethodTypes,
   Product,
   ProductItem,
@@ -24,8 +24,8 @@ import {
 } from '@angular/forms';
 import { combineLatest, map, Observable, startWith } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
+import { SupabaseService } from '../../services/supabase.service';
 
-type InvoiceRows = FormArray<InvoiceRow>;
 type InvoiceRow = FormGroup<{
   id: FormControl;
   name: FormControl;
@@ -48,6 +48,7 @@ type InvoiceRow = FormGroup<{
   styleUrl: './invoice-form.scss',
 })
 export class InvoiceForm {
+  supabaseService = inject(SupabaseService);
   productService = inject(ProductService);
   customerService = inject(CustomerService);
   paymentMethods = paymentMethodTypes;
@@ -60,32 +61,38 @@ export class InvoiceForm {
   selectedCustomer!: CustomerAddress;
   displayCustomer = (c: CustomerOption) => c.email;
 
-  controlEmail = new FormControl('', [
-    // Fixes the validation against type 'email' in filter autocomplete component as it emits an object.
-    (control) => (typeof control.value !== 'string' ? null : Validators.email(control)),
-    Validators.required,
-  ]);
-  controlDate = new FormControl('', Validators.required);
-  controlDueDate = new FormControl('', Validators.required);
-  controlPayment = new FormControl('', Validators.required);
-  controlFullName = new FormControl('', Validators.required);
-  controlStreetName = new FormControl('', Validators.required);
-  controlPostalCode = new FormControl('', Validators.required);
-  controlCity = new FormControl('', Validators.required);
-  controlCountry = new FormControl('', Validators.required);
+  invoiceForm = new FormGroup({
+    controlEmail: new FormControl('', [
+      // Fixes the validation against type 'email' in filter autocomplete component as it emits an object.
+      (control) => (typeof control.value !== 'string' ? null : Validators.email(control)),
+      Validators.required,
+    ]),
+    controlDate: new FormControl('', Validators.required),
+    controlDueDate: new FormControl('', Validators.required),
+    controlPayment: new FormControl<PaymentMethod | undefined>(undefined, {
+      nonNullable: true,
+      validators: Validators.required,
+    }),
+    controlFullName: new FormControl('', Validators.required),
+    controlStreetName: new FormControl('', Validators.required),
+    controlPostalCode: new FormControl('', Validators.required),
+    controlCity: new FormControl('', Validators.required),
+    controlCountry: new FormControl('', Validators.required),
+
+    productGroups: new FormArray<InvoiceRow>([]),
+  });
 
   itemCost$!: Observable<number>;
-  productGroups = new FormArray<InvoiceRow>([]);
+  InvoiceFormData = signal({});
 
   onCustomerSelected(customer: CustomerOption): void {
     this.customerService.getCustomerById(customer.id).subscribe((value) => {
       this.selectedCustomer = value;
-
-      this.controlFullName.setValue(this.selectedCustomer.full_name);
-      this.controlStreetName.setValue(this.selectedCustomer.street_name);
-      this.controlPostalCode.setValue(this.selectedCustomer.postal_code);
-      this.controlCity.setValue(this.selectedCustomer.city);
-      this.controlCountry.setValue(this.selectedCustomer.country);
+      this.invoiceForm.controls.controlFullName.setValue(this.selectedCustomer.full_name);
+      this.invoiceForm.controls.controlStreetName.setValue(this.selectedCustomer.street_name);
+      this.invoiceForm.controls.controlPostalCode.setValue(this.selectedCustomer.postal_code);
+      this.invoiceForm.controls.controlCity.setValue(this.selectedCustomer.city);
+      this.invoiceForm.controls.controlCountry.setValue(this.selectedCustomer.country);
     });
   }
 
@@ -96,7 +103,6 @@ export class InvoiceForm {
       price: new FormControl('', [Validators.required]),
       qty: new FormControl('', Validators.required),
     });
-    group.controls.id.disable();
     return group;
   }
 
@@ -105,15 +111,15 @@ export class InvoiceForm {
   }
 
   addRow(): void {
-    this.productGroups.push(this.createRow());
+    this.invoiceForm.controls.productGroups.push(this.createRow());
   }
 
   removeRow(index: number): void {
-    this.productGroups.removeAt(index);
+    this.invoiceForm.controls.productGroups.removeAt(index);
   }
 
   get rows(): InvoiceRow[] {
-    return this.productGroups.controls;
+    return this.invoiceForm.controls.productGroups.controls;
   }
 
   onProductSelected(product: Product, row: FormGroup): void {
@@ -133,8 +139,32 @@ export class InvoiceForm {
     ]).pipe(map(([price, qty]) => Number(price) * Number(qty)));
   }
 
-  onSubmit(event: Event) {
-    event.preventDefault();
-    console.log('Submit works');
+  async onSubmit() {
+    const { data, error } = await this.supabaseService.client
+      .from('invoices')
+      .insert({
+        customer_id: this.selectedCustomer.id,
+        payment_method: this.invoiceForm.controls.controlPayment.value,
+        due_date: this.invoiceForm.controls.controlDueDate.value,
+        status: 'sent',
+      })
+      .select();
+
+    if (!data || error) {
+      console.log(error.message);
+      return;
+    }
+
+    for (let product of this.invoiceForm.controls.productGroups.value) {
+      const { error } = await this.supabaseService.client.from('orders').insert({
+        invoice_id: data[0].id,
+        product_id: product.id,
+        price: product.price,
+        quantity: product.qty,
+      });
+      if (error) {
+        console.log(error.message);
+      }
+    }
   }
 }
