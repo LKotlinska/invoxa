@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, Output, Signal, signal } from '@angular/core';
-import { OutlinedInput } from '../../shared/form-fields/outlined-input/outlined-input';
-import { SelectInput } from '../../shared/form-fields/select-input/select-input';
+import { OutlinedInput } from '../../../shared/form-fields/outlined-input/outlined-input';
+import { SelectInput } from '../../../shared/form-fields/select-input/select-input';
 
 import { MatButtonModule } from '@angular/material/button';
 import {
@@ -10,10 +10,10 @@ import {
   paymentMethodTypes,
   Product,
   ProductItem,
-} from '../../../types/types';
-import { ProductService } from '../../services/product.service';
-import { FilterAutoSelect } from '../form-fields/filter-auto-select/filter-auto-select';
-import { CustomerService } from '../../services/customer.service';
+} from '../../../../types/types';
+import { ProductService } from '../../../services/product.service';
+import { FilterAutoSelect } from '../../../shared/form-fields/filter-auto-select/filter-auto-select';
+import { CustomerService } from '../../../services/customer.service';
 import {
   FormControl,
   FormGroup,
@@ -24,7 +24,7 @@ import {
 } from '@angular/forms';
 import { combineLatest, map, Observable, startWith } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
-import { SupabaseService } from '../../services/supabase.service';
+import { SupabaseService } from '../../../services/supabase.service';
 
 type InvoiceRow = FormGroup<{
   id: FormControl;

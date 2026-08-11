@@ -4,7 +4,8 @@ import { Invoices } from './pages/invoices/invoices';
 import { Customers } from './pages/customers/customers';
 import { Products } from './pages/products/products';
 import { Settings } from './pages/settings/settings';
-import { Orders } from './pages/orders/orders';
+import { InvoiceForm } from './pages/invoices/invoice-form/invoice-form';
+import { InvoiceTable } from './pages/invoices/invoice-table/invoice-table';
 
 export const routes: Routes = [
   {
@@ -19,6 +20,16 @@ export const routes: Routes = [
   {
     path: 'invoices',
     component: Invoices,
+    children: [
+      {
+        path: '',
+        component: InvoiceTable,
+      },
+      {
+        path: 'add',
+        component: InvoiceForm,
+      },
+    ],
   },
   {
     path: 'customers',
@@ -27,10 +38,6 @@ export const routes: Routes = [
   {
     path: 'products',
     component: Products,
-  },
-  {
-    path: 'orders',
-    component: Orders,
   },
   {
     path: 'settings',
