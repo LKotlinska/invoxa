@@ -15,7 +15,7 @@ export type CustomerOption = Pick<Customer, 'id' | 'email'>;
 
 export type CustomerAddress = Pick<
   Customer,
-  'full_name' | 'street_name' | 'postal_code' | 'city' | 'country'
+  'id' | 'full_name' | 'street_name' | 'postal_code' | 'city' | 'country'
 >;
 
 export type Product = Database['public']['Tables']['products']['Row'];
