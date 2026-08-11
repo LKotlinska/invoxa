@@ -123,12 +123,10 @@ export class InvoiceForm {
   }
 
   onProductSelected(product: Product, row: FormGroup): void {
-    this.productService.getProductById(product.id).subscribe((value) => {
-      row.patchValue({
-        id: value.id,
-        name: value.product_name,
-        price: value.price,
-      });
+    this.selectedProduct = product;
+    row.patchValue({
+      id: product.id,
+      price: product.price,
     });
   }
 

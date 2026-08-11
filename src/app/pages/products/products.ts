@@ -11,7 +11,7 @@ import { ProductService } from '../../services/product.service';
 })
 export class Products {
   products = signal<Product[]>([]);
-  displayedColumns = signal<(keyof Product)[]>(['id', 'product_name', 'price', 'sold']);
+  displayedColumns = signal<(keyof Product)[]>(['id', 'product_name', 'price']);
   productService = inject(ProductService);
 
   ngOnInit(): void {
