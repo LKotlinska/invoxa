@@ -1,16 +1,15 @@
 import { Component, inject, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { Header } from '../../shared/header/header';
-import { OrderTableData } from '../../../types/types';
-import { OrderService } from '../../services/order.service';
+import { OrderTableData } from '../../../../types/types';
+import { OrderService } from '../../../services/order.service';
+import { DataTable } from '../../../shared/data-table/data-table';
 
 @Component({
-  selector: 'app-orders',
-  imports: [RouterOutlet, Header],
-  templateUrl: './orders.html',
-  styleUrl: './orders.scss',
+  selector: 'app-order-table',
+  imports: [DataTable],
+  templateUrl: './order-table.html',
+  styleUrl: './order-table.scss',
 })
-export class Orders {
+export class OrderTable {
   orders = signal<OrderTableData[]>([]);
   displayedColumns = signal<(keyof OrderTableData)[]>([
     'id',
