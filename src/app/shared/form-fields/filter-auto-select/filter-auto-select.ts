@@ -1,13 +1,10 @@
-import { Component, inject, input, OnInit, output, Signal } from '@angular/core';
+import { Component, input, output, Signal } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { combineLatest, Observable } from 'rxjs';
-import { filter, map, startWith, switchMap } from 'rxjs/operators';
-import { AsyncPipe } from '@angular/common';
+import { combineLatest } from 'rxjs';
+import { map, startWith, switchMap } from 'rxjs/operators';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { CustomerService } from '../../../services/customer.service';
-import { Customer, CustomerOption } from '../../../../types/types';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
@@ -18,7 +15,6 @@ import { toObservable, toSignal } from '@angular/core/rxjs-interop';
     MatInputModule,
     MatAutocompleteModule,
     ReactiveFormsModule,
-    AsyncPipe,
   ],
   templateUrl: './filter-auto-select.html',
   styleUrl: './filter-auto-select.scss',
