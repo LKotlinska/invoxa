@@ -1,25 +1,18 @@
-import { Component, inject, signal, effect, OnInit } from '@angular/core';
-import { Event, Router, NavigationStart, NavigationEnd } from '@angular/router';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, input } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-header',
-  imports: [MatDividerModule],
+  imports: [MatDividerModule, MatButtonModule, MatIcon],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })
 export class Header {
-  private readonly router = inject(Router);
-  currentUrl = signal('');
-  constructor() {
-    this.router.events.pipe(takeUntilDestroyed()).subscribe((event: Event) => {
-      if (event instanceof NavigationEnd) {
-        if (event.url === '/') {
-          event.url = '/dashboard';
-        }
-        this.currentUrl.set(event.url.replace('/', ''));
-      }
-    });
-  }
+  pageName = input<string>();
+  btnLabel = input<string>();
+  link = input<string>();
+  target = input<string>('_self');
+  matIcon = input<string | undefined>(undefined);
 }

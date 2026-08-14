@@ -1,3 +1,9 @@
 <header class="header">
-  <h2>{{ currentUrl() }}</h2>
+  <h2>{{ pageName() }}</h2>
+  <a matButton="filled" [href]="link()" [target]="target()">
+    @if (matIcon(); as icon) {
+      <mat-icon aria-hidden="false" [fontIcon]="icon"></mat-icon>
+    }
+    {{ btnLabel() }}
+  </a>
 </header>
