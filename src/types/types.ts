@@ -9,7 +9,7 @@ export type InvoiceTableData = Pick<Invoice, 'id' | 'invoice_number' | 'due_date
 
 export type Customer = Database['public']['Tables']['customers']['Row'];
 
-export type CustomerTableData = Omit<Customer, 'county' | 'created_at'>;
+export type CustomerTableData = Omit<Customer, 'created_at'>;
 
 export type CustomerOption = Pick<Customer, 'id' | 'email'>;
 
