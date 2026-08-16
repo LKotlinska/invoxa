@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, Output, Signal, signal } from '@angular/core';
+import { Component, inject, OnInit, Output, Signal, signal, ViewChild } from '@angular/core';
 import { OutlinedInput } from '../../../shared/form-fields/outlined-input/outlined-input';
 import { SelectInput } from '../../../shared/form-fields/select-input/select-input';
 
@@ -21,6 +21,7 @@ import {
   ReactiveFormsModule,
   FormArray,
   Validators,
+  FormGroupDirective,
 } from '@angular/forms';
 import { combineLatest, map, Observable, startWith } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
@@ -48,6 +49,7 @@ type InvoiceRow = FormGroup<{
   styleUrl: './invoice-form.scss',
 })
 export class InvoiceForm {
+  @ViewChild(FormGroupDirective) formDirective!: FormGroupDirective;
   supabaseService = inject(SupabaseService);
   productService = inject(ProductService);
   customerService = inject(CustomerService);
@@ -164,5 +166,8 @@ export class InvoiceForm {
         console.log(error.message);
       }
     }
+    this.formDirective.resetForm();
+    this.invoiceForm.controls.productGroups.clear();
+    this.addRow();
   }
 }

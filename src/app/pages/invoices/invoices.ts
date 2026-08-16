@@ -3,7 +3,6 @@ import { RouterOutlet } from '@angular/router';
 import { Header } from '../../shared/header/header';
 
 @Component({
-  selector: 'app-invoices',
   imports: [RouterOutlet, Header],
   templateUrl: './invoices.html',
   styleUrl: './invoices.scss',
