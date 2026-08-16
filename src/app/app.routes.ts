@@ -10,6 +10,7 @@ import { Orders } from './pages/orders/orders';
 import { OrderTable } from './pages/orders/order-table/order-table';
 import { CustomerTable } from './pages/customers/customer-table/customer-table';
 import { ProductTable } from './pages/products/product-table/product-table';
+import { CustomerForm } from './pages/customers/customer-form/customer-form';
 
 export const routes: Routes = [
   {
@@ -42,6 +43,10 @@ export const routes: Routes = [
       {
         path: '',
         component: CustomerTable,
+      },
+      {
+        path: 'add',
+        component: CustomerForm,
       },
     ],
   },
