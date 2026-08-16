@@ -1,0 +1,46 @@
+<form [formGroup]="customerForm" (ngSubmit)="onSubmit()">
+  <h3>Add new customer</h3>
+  <app-outlined-input
+    label="Full name"
+    type="text"
+    [myControl]="customerForm.controls.fullName"
+    placeholder="Eric Johansson"
+    required
+  />
+  <app-outlined-input
+    label="Email"
+    type="email"
+    [myControl]="customerForm.controls.email"
+    placeholder="eric@example.com"
+    required
+  />
+  <app-outlined-input
+    label="Street name"
+    type="text"
+    [myControl]="customerForm.controls.streetName"
+    placeholder="Kungsgatan 12"
+    required
+  />
+  <app-outlined-input
+    label="Postal code"
+    type="text"
+    [myControl]="customerForm.controls.postalCode"
+    placeholder="411 12"
+    required
+  />
+  <app-outlined-input
+    label="City"
+    type="text"
+    [myControl]="customerForm.controls.city"
+    placeholder="Stockholm"
+    required
+  />
+  <app-outlined-input
+    label="Country"
+    type="text"
+    [myControl]="customerForm.controls.country"
+    placeholder="Sweden"
+    required
+  />
+  <button type="submit" matButton="filled">Submit</button>
+</form>
