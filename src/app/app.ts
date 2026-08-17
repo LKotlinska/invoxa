@@ -9,5 +9,5 @@ import { SideNav } from './shared/side-nav/side-nav';
   styleUrl: './app.scss',
 })
 export class App {
-  protected readonly title = signal('invoxa');
+  protected readonly title = signal('Invoiceo');
 }

@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "invoxa": {
+    "Invoiceo": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -62,10 +62,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "invoxa:build:production"
+              "buildTarget": "Invoiceo:build:production"
             },
             "development": {
-              "buildTarget": "invoxa:build:development"
+              "buildTarget": "Invoiceo:build:development"
             }
           },
           "defaultConfiguration": "development"
