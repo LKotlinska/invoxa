@@ -15,14 +15,21 @@ export class CustomerForm {
 
   customerForm = new FormGroup({
     fullName: new FormControl<string>('', { nonNullable: true, validators: Validators.required }),
-    email: new FormControl<string>('', Validators.required),
-    streetName: new FormControl<string>('', Validators.required),
-    postalCode: new FormControl<number | null>(null, Validators.required),
-    city: new FormControl<string>('', Validators.required),
-    country: new FormControl<string>('', Validators.required),
+    email: new FormControl<string>('', { nonNullable: true, validators: Validators.required }),
+    streetName: new FormControl<string>('', { nonNullable: true, validators: Validators.required }),
+    postalCode: new FormControl<string>('', { nonNullable: true, validators: Validators.required }),
+    city: new FormControl<string>('', { nonNullable: true, validators: Validators.required }),
+    country: new FormControl<string>('', { nonNullable: true, validators: Validators.required }),
   });
 
   async onSubmit() {
-    const { error } = await this.supabaseService.client.from('customers').insert();
+    const { error } = await this.supabaseService.client.from('customers').insert({
+      full_name: this.customerForm.controls.fullName.value,
+      email: this.customerForm.controls.email.value,
+      street_name: this.customerForm.controls.streetName.value,
+      postal_code: this.customerForm.controls.postalCode.value,
+      city: this.customerForm.controls.city.value,
+      country: this.customerForm.controls.city.value,
+    });
   }
 }
